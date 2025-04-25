@@ -1,11 +1,393 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Instagram Planner</title>
-  </head>
-  <body>
-    <h1>Hello, IG Planner!</h1>
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSopTex4KOPmEXjvkWmQPg0cX5lgFo_tAc4lOa96049PdKB0F1Scit4ccvnuQy2v2WzGPT1a5wdXkOa/pubhtml" width="100%" height="600"></iframe>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Content Creator Notebook</title>
+    <style>
+        :root {
+            --primary-color: #E1306C;
+            --secondary-color: #833AB4;
+            --accent-color: #F77737;
+            --light-color: #FCFCFC;
+            --dark-color: #262626;
+            --gradient: linear-gradient(45deg, #833AB4, #E1306C, #F77737);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 30px 0 15px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 25px 0 10px;
+            color: var(--primary-color);
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .intro {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+        
+        .table-of-contents {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .table-of-contents ul {
+            list-style-type: none;
+        }
+        
+        .table-of-contents ul li {
+            margin-bottom: 10px;
+        }
+        
+        .table-of-contents ul li a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .table-of-contents ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 49, 108, 0.2), rgba(231, 49, 108, 0) 70%);
+            padding: 3px;
+        }
+    </style>
+    <script>
+        // Initialize shared data storage
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize default data if not already set
+            if (!localStorage.getItem('instagramPlannerData')) {
+                const defaultData = {
+                    // Content metrics
+                    posts: 4,
+                    reels: 8,
+                    stories: 15,
+                    lives: 1,
+                    
+                    // Engagement metrics
+                    likes: 1200,
+                    comments: 480,
+                    shares: 560,
+                    saves: 780,
+                    
+                    // Growth metrics
+                    followers: 5243,
+                    newFollowers: 156,
+                    profileVisits: 1876,
+                    websiteClicks: 342,
+                    reach: 28500,
+                    
+                    // Content pillars
+                    contentPillars: [
+                        {name: "Education/Expertise", percentage: 30},
+                        {name: "Inspiration/Motivation", percentage: 25},
+                        {name: "Behind-the-Scenes", percentage: 20},
+                        {name: "Community/Engagement", percentage: 15},
+                        {name: "Promotion", percentage: 10}
+                    ],
+                    
+                    // Weekly content
+                    weeklyContent: []
+                };
+                
+                localStorage.setItem('instagramPlannerData', JSON.stringify(defaultData));
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Instagram Content Creator Notebook</h1>
+            <p>Your complete guide to planning, creating, and growing your Instagram presence</p>
+        </header>
+        
+        <section class="intro">
+            <h2>Welcome to Your Instagram Content Creator Notebook</h2>
+            <p>This comprehensive notebook is designed to help you plan, create, and manage your Instagram content with ease. Whether you're a seasoned creator or just starting out, these tools and templates will help you develop a consistent and engaging Instagram presence.</p>
+            <p>Inside, you'll find monthly planning pages, post ideas for various niches, hashtag banks, content templates, and a curated list of free tools to enhance your content creation process.</p>
+        </section>
+        
+        <section class="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#monthly-planning">Monthly Planning Pages</a></li>
+                <li><a href="#post-ideas">Niche-Specific Post Ideas</a></li>
+                <li><a href="#hashtag-bank">Hashtag Banks</a></li>
+                <li><a href="#templates">Content Planning Templates</a></li>
+                <li><a href="#tools">Free Content Creation Tools</a></li>
+            </ul>
+        </section>
+        
+        <section id="monthly-planning" class="section">
+            <h2>Monthly Planning Pages</h2>
+            <p>Effective content planning starts with organization. These monthly planning pages will help you visualize your content calendar, track your engagement metrics, and align your posts with your content pillars.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Monthly Calendar Layout</h4>
+                    <p>Plan your content schedule with a visual monthly calendar. Map out your posts, stories, and reels to ensure consistent posting and content variety.</p>
+                    <a href="monthly_calendar_layout.html" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Weekly Content Tracker</h4>
+                    <p>Break down your monthly plan into actionable weekly tasks. Track content creation, scheduling, and engagement activities.</p>
+                    <a href="weekly_content_tracker.html" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Content Pillars & Themes</h4>
+                    <p>Define your core content pillars and monthly themes to maintain focus and consistency in your Instagram strategy.</p>
+                    <a href="content_pillars_themes.html" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Engagement Metrics Tracker</h4>
+                    <p>Monitor your growth and engagement metrics to understand what content resonates with your audience and refine your strategy.</p>
+                    <a href="engagement_metrics_tracker.html" class="btn">View Template</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="post-ideas" class="section">
+            <h2>Niche-Specific Post Ideas</h2>
+            <p>Never run out of content ideas again! Browse through 50 creative post ideas for each niche, designed to engage your audience and showcase your expertise.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Education Niche</h4>
+                    <p>Content ideas for educators, coaches, and knowledge-sharing accounts. From tutorial formats to behind-the-scenes teaching moments.</p>
+                    <a href="#" class="btn">View Ideas</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Beauty Niche</h4>
+                    <p>Engaging content ideas for makeup artists, skincare enthusiasts, and beauty brands. From product reviews to technique tutorials.</p>
+                    <a href="#" class="btn">View Ideas</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Travel Niche</h4>
+                    <p>Wanderlust-inspiring content ideas for travel bloggers and tourism accounts. From destination features to travel tips.</p>
+                    <a href="#" class="btn">View Ideas</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Lifestyle Niche</h4>
+                    <p>Versatile content ideas for lifestyle influencers covering home, wellness, food, and personal development.</p>
+                    <a href="#" class="btn">View Ideas</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Business Niche</h4>
+                    <p>Strategic content ideas for entrepreneurs, coaches, and business accounts to showcase expertise and build authority.</p>
+                    <a href="#" class="btn">View Ideas</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="hashtag-bank" class="section">
+            <h2>Hashtag Banks</h2>
+            <p>Boost your discoverability with these curated hashtag collections. Each bank includes niche-specific hashtags organized by category, along with strategy tips for maximum reach.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Education Hashtags</h4>
+                    <p>Hashtags for educational content, teaching resources, learning communities, and educational thought leadership.</p>
+                    <a href="#" class="btn">View Hashtags</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Beauty Hashtags</h4>
+                    <p>Hashtags for makeup, skincare, hair styling, product reviews, and beauty techniques.</p>
+                    <a href="#" class="btn">View Hashtags</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Travel Hashtags</h4>
+                    <p>Hashtags for destinations, travel photography, adventures, travel tips, and cultural experiences.</p>
+                    <a href="#" class="btn">View Hashtags</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Lifestyle Hashtags</h4>
+                    <p>Hashtags for home decor, wellness, food, personal style, and everyday moments.</p>
+                    <a href="#" class="btn">View Hashtags</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Business Hashtags</h4>
+                    <p>Hashtags for entrepreneurship, marketing, leadership, business growth, and professional development.</p>
+                    <a href="#" class="btn">View Hashtags</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="templates" class="section">
+            <h2>Content Planning Templates</h2>
+            <p>Streamline your content creation process with these ready-to-use templates. From batch planning to engagement strategies, these templates will help you work more efficiently.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Content Batch Planning</h4>
+                    <p>Plan and create content in batches to save time and maintain consistency. Includes workflows and checklists.</p>
+                    <a href="#" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Caption Templates</h4>
+                    <p>Frameworks and formulas for writing engaging captions for different content types and purposes.</p>
+                    <a href="#" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Content Pillar Template</h4>
+                    <p>Define and develop your core content themes to create cohesive and strategic content.</p>
+                    <a href="#" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Story & Reel Planning</h4>
+                    <p>Templates for planning engaging Stories and Reels that capture attention and drive engagement.</p>
+                    <a href="#" class="btn">View Template</a>
+                </div>
+                
+                <div class="card">
+                    <h4>Engagement Strategy</h4>
+                    <p>Develop a comprehensive plan for building community and increasing engagement on your posts.</p>
+                    <a href="#" class="btn">View Template</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tools" class="section">
+            <h2>Free Content Creation Tools</h2>
+            <p>Enhance your content creation process without breaking the bank. This curated list of free tools covers everything from video editing to analytics.</p>
+            
+            <div class="card">
+                <h4>Comprehensive Tools List</h4>
+                <p>A complete guide to free tools for Instagram content creators, including video editors, design tools, scheduling platforms, and more.</p>
+                <a href="#" class="btn">View Tools List</a>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Instagram Content Creator Notebook © 2025</p>
+            <p>Created to help content creators plan, create, and grow their Instagram presence</p>
+        </footer>
+    </div>
+</body>
 </html>
